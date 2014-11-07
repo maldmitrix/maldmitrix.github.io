@@ -1,0 +1,335 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 13.04.2 ] */
+
+/* [wxMaxima: title   start ]
+Решение краевой задачи методом 
+Галеркина
+   [wxMaxima: title   end   ] */
+
+/* [wxMaxima: section start ]
+Подготовительный шаг
+   [wxMaxima: section end   ] */
+
+/* [wxMaxima: subsect start ]
+Задание линейного дифференциального оператора, 
+функции для правой части уравнения, 
+общего выражения невязки
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: input   start ] */
+L(y,x) := diff(y,x,2) - 3*diff(y,x,1) + 2*y$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+Pfi3(x) := 2*x^2 - 6*x + 2$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+R(y,x) := L(y,x) - Pfi3(x)$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+Задание главного члена пробной функции 
+и базисных функций
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: input   start ] */
+u0(x) := 6 - 5*x$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+u1(x) := 1 - x +1/3*x^2$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+u2(x) :=1 - x + 1/4*x^3$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+u3(x) :=1 - x + 1/5*x^4$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+u4(x) :=1 - x + 1/6*x^5$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+Невязка только от главной функции
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: input   start ] */
+RU0(x) := R(u0(x),x)$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+Левая часть дифф.уравнения при 
+каждой из базисных функций
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: input   start ] */
+Lu1(x) := L(u1(x),x)$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+Lu2(x) := L(u2(x),x)$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+Lu3(x) :=L(u3(x),x)$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+Lu4(x) :=L(u4(x),x)$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+Общее выражение внутреннего 
+произведения двух произвольных функций
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: input   start ] */
+InProd(y1, y2,x,a,b) := integrate(y1(x)*y2(x),x,a,b)$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: page break    ] */
+
+/* [wxMaxima: section start ]
+Шаг первый
+   [wxMaxima: section end   ] */
+
+/* [wxMaxima: subsect start ]
+Преобразованное условие ортогональности
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: input   start ] */
+K1:  InProd(Lu1,u1,x,0,1)$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+f1: InProd(RU0,u1,x,0,1)*(-1)$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+Ищем коэффициент
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: input   start ] */
+c1: f1/K1$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+Записываем пробное решение
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: input   start ] */
+U1(x) := u0(x) + c1*u1(x)$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+Невязка на первом шаге
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: input   start ] */
+RU1(x) := R(U1(x),x)$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: page break    ] */
+
+/* [wxMaxima: section start ]
+Шаг второй
+   [wxMaxima: section end   ] */
+
+/* [wxMaxima: subsect start ]
+Матричное уравнение ортогональности
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: input   start ] */
+K2: matrix(  [InProd(Lu1,u1,x,0,1),  InProd(Lu2,u1,x,0,1)],
+                  [InProd(Lu1,u2,x,0,1),  InProd(Lu2,u2,x,0,1)]  )$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+f2: matrix(  [InProd(RU0,u1,x,0,1)*(-1) ],  
+                  [InProd(RU0,u2,x,0,1)*(-1) ] )$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+Ищем коэффициенты
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: input   start ] */
+c2:  invert(K2).f2$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+Записываем пробное решение
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: input   start ] */
+U2(x) := u0(x) + c2[1]*u1(x)+c2[2]*u2(x)$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+Невязка на втором шаге
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: input   start ] */
+RU2(x) := R(U2(x)[1],x)$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: page break    ] */
+
+/* [wxMaxima: section start ]
+Шаг третий
+   [wxMaxima: section end   ] */
+
+/* [wxMaxima: subsect start ]
+Матричное уравнение ортогональности
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: input   start ] */
+K3: matrix(  
+[InProd(Lu1,u1,x,0,1),  InProd(Lu2,u1,x,0,1), 
+                                            InProd(Lu3,u1,x,0,1) ],
+[InProd(Lu1,u2,x,0,1),  InProd(Lu2,u2,x,0,1), 
+                                            InProd(Lu3,u2,x,0,1)] , 
+[InProd(Lu1,u3,x,0,1),  InProd(Lu2,u3,x,0,1), 
+                                            InProd(Lu3,u3,x,0,1)] )$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+f3: matrix(  [InProd(RU0,u1,x,0,1)*(-1) ],  
+                  [InProd(RU0,u2,x,0,1)*(-1) ],
+                  [InProd(RU0,u3,x,0,1)*(-1) ] )$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+Ищем коэффициенты
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: input   start ] */
+c3:  invert(K3).f3$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+Записываем пробное решение
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: input   start ] */
+U3(x) := u0(x) + c3[1]*u1(x) + c3[2]*u2(x) + c3[3]*u3(x)$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+Невязка на третьем шаге
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: input   start ] */
+RU3(x) := R(U3(x)[1],x)$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: page break    ] */
+
+/* [wxMaxima: section start ]
+Шаг четвертый
+   [wxMaxima: section end   ] */
+
+/* [wxMaxima: subsect start ]
+Матричное уравнение ортогональности
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: input   start ] */
+K4: matrix(  [InProd(Lu1,u1,x,0,1),  InProd(Lu2,u1,x,0,1), 
+                     InProd(Lu3,u1,x,0,1), InProd(Lu4,u1,x,0,1)  ],
+                  [InProd(Lu1,u2,x,0,1),  InProd(Lu2,u2,x,0,1), 
+                    InProd(Lu3,u2,x,0,1) , InProd(Lu4,u2,x,0,1)  ] , 
+                 [InProd(Lu1,u3,x,0,1),  InProd(Lu2,u3,x,0,1), 
+                   InProd(Lu3,u3,x,0,1) , InProd(Lu4,u3,x,0,1)   ] ,
+                [InProd(Lu1,u4,x,0,1),  InProd(Lu2,u4,x,0,1), 
+                  InProd(Lu3,u4,x,0,1) , InProd(Lu4,u4,x,0,1)   ])$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+f4: matrix(  [InProd(RU0,u1,x,0,1)*(-1) ],  
+                  [InProd(RU0,u2,x,0,1)*(-1) ],
+                  [InProd(RU0,u3,x,0,1)*(-1) ],
+                  [InProd(RU0,u4,x,0,1)*(-1) ])$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+Ищем коэффициенты
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: input   start ] */
+c4:  invert(K4).f4$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+Записываем пробное решение
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: input   start ] */
+U4(x) := u0(x) + c4[1]*u1(x) + c4[2]*u2(x) 
++ c4[3]*u3(x) + c4[4]*u4(x)$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+Невязка на третьем шаге
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: input   start ] */
+RU4(x) := R(U4(x)[1],x)$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: page break    ] */
+
+/* [wxMaxima: section start ]
+Точное решение
+   [wxMaxima: section end   ] */
+
+/* [wxMaxima: input   start ] */
+Uexact(x) := 1/2*(%e^2 + 7)/(%e^2 - %e)*%e^x -
+(7 + %e)/3/(%e^2 - %e)*%e^(2*x) + x^2$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: page break    ] */
+
+/* [wxMaxima: section start ]
+Графики
+   [wxMaxima: section end   ] */
+
+/* [wxMaxima: subsect start ]
+Графики невязок
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: input   start ] */
+plot2d( [ RU1(x), RU2(x), RU3(x), RU4(x) ], [x,0,1],
+ [plot_format, gnuplot],[legend,"Шаг m = 1",
+"Шаг m = 2","Шаг m = 3","Шаг m = 4"],
+[ylabel, "Невязка R(x)"], [nticks,100])$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+Графики пробных решений
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: input   start ] */
+plot2d( [ U1(x), U2(x)[1], U3(x)[1], U4(x)[1]], 
+[x,0,1], [plot_format, gnuplot],
+[legend,"Шаг m = 1", "Шаг m = 2", "Шаг m = 3", "Шаг m = 4"],
+[ylabel, "Пробное решение U(x)"], [nticks,100])$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: subsect start ]
+График точного решения и последнее пробное решение
+   [wxMaxima: subsect end   ] */
+
+/* [wxMaxima: input   start ] */
+plot2d( [ U4(x)[1], Uexact(x)], [x,0,1], [plot_format, gnuplot],
+[legend,"Шаг m = 4", "Точное реш."],
+[ylabel, "Пробное решение U(x)"], [nticks,100])$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: page break    ] */
+
+/* Maxima can't load/batch files which end with a comment! */
+"Created with wxMaxima"$
